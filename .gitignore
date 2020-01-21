@@ -1,3 +1,4 @@
 dashenv/*
 dashenv
 creds.json
+sqlite_db
