@@ -1,0 +1,9 @@
+CREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  
+  acctype TEXT NOT NULL,
+  password TEXT,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  profile_pic TEXT NOT NULL
+);

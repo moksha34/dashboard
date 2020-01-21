@@ -1,0 +1,17 @@
+body{
+    background-image: url("/static/images/bg.jpg");
+    background-size: contain;
+}
+
+.logindiv{
+    background-color: dimgrey;
+    max-width: 600px;
+}
+
+.signupdiv {
+    background-color: dimgrey;
+}
+
+.invalid-feedback{
+    display: block;
+}
