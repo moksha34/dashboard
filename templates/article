@@ -1,0 +1,7 @@
+<div class="media">
+  <img class="mr-3 media-img " src="{{article['urlToImage']}}" alt="Generic placeholder image">
+  <div class="media-body">
+    <h6 class="mt-0 text-info ">{{article["title"]}}</h6>
+    <p class="fort-italic">{{article["description"]}}</p>
+  </div>
+</div>

@@ -1,8 +1,12 @@
 body{
-    background-image: url("/static/images/bg.jpg");
-    background-size: contain;
+    background-image: url("/static/images/bg-main.jpg");
+    background-size: 100%;
 }
 
+.media-img {
+    max-width: 100px;
+    padding: 3px;
+}
 .logindiv{
     background-color: dimgrey;
     max-width: 600px;

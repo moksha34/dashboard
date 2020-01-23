@@ -1,0 +1,12 @@
+<div class="btn-group ml-2 rounded">
+   <button type="button"  class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+     {{name}}</button>
+  <div class="dropdown-menu">
+    {%for val in vals %}
+       <button id={{val}} onclick="newsselected('{{val}}')" class="dropdown-item" href="#">{{val}}</button>
+     {%endfor%}
+    <div class="dropdown-divider"></div>
+    
+  </div>
+ 
+</div>

@@ -2,3 +2,4 @@ dashenv/*
 dashenv
 creds.json
 sqlite_db
+config.json

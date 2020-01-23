@@ -11,6 +11,10 @@ from flask_login import (
     login_user,
     logout_user,
 )
+from newschannel import *
+from collections import defaultdict
+from flask_socketio import SocketIO,send,emit
+from jinja2 import Environment as env ,FileSystemLoader as fs_loader
 
 from oauthlib.oauth2 import WebApplicationClient
 import requests
@@ -60,6 +64,17 @@ def load_user(user_id):
 def unauthorized():
     flash("you need to login before you access homepage","warning")
     return redirect(url_for("signin"))
+
+socketio=SocketIO(app)
+mychannel=Newschannel('cnn')
+topnews=mychannel.get_top_news(5)
+news_src={}
+jinjaenv = env(loader=fs_loader('templates'))
+for k in Newschannel.COUNTRY_CODE.keys():
+    news_src.update({k: Newschannel.get_all_srcs(k)})
+
+
+
 #  homepage
 
 @app.route("/signin",methods=["GET","POST"])
@@ -72,23 +87,13 @@ def signin():
             login_user(user)
             return redirect(url_for("index"))
     return render_template("login.html",form=loginform)
-    # if current_user.is_authenticated:
-    #     return (
-    #         "<p>Hello, {}! You're logged in! Email: {}</p>"
-    #         "<div><p>Google Profile Picture:</p>"
-    #         '<img src="{}" alt="Google profile pic"></img></div>'
-    #         '<a class="button" href="/logout">Logout</a>'.format(
-    #             current_user.name, current_user.email, current_user.profile_pic
-    #         )
-    #     )
-    # else:
-    #     return '<a class="button" href="/login">Google Login</a>'
+  
 
 @app.route("/")
 @login_required
 def index():
     print(current_user.__dict__)
-    return render_template("index.html",user=current_user)
+    return render_template("index.html",user=current_user,title="Dash34",articles=topnews,srcs=news_src)
     
 
 @app.route("/signup",methods=["GET","POST"])
@@ -108,6 +113,19 @@ def register():
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
+
+@socketio.on('connected')
+def coneected(data):
+    print(data)
+
+@socketio.on('newschannel selected')
+def newchannel(data):
+    newschannel=Newschannel(data["data"])
+    newnews=newschannel.get_top_news(5)
+    sendnews=''
+    for article in newnews:
+        sendnews=sendnews+(jinjaenv.get_template('article').render(article=article))
+    emit("news recieved",{"news": sendnews })
 
 
 
@@ -190,4 +208,4 @@ def logout():
     return redirect(url_for("index"))
 
 if __name__=="__main__":
-    app.run(debug=True,ssl_context="adhoc")    
+      socketio.run(app,debug=True,ssl_context="adhoc")
