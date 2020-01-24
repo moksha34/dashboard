@@ -27,7 +27,13 @@
     {%endfor%}
     </div>
 </div>
-    <div class="col-3 bg-light text-dark rounded mr-2"> <h1>Stocks </h1> </div>
+    <div class="col-3 bg-transparent text-dark rounded mr-2"> <h1>Stocks </h1> 
+        {%for key in stocks_hist.keys()%}
+        <div class="row" ><label class="text-light">{{key}}:{{stocks_hist[key]['open'][-1]}}</label>
+        <div height='200px'id={{key}}div ></div>
+        </div>
+        {%endfor%}
+        
 </div>
 </div>
 
@@ -52,6 +58,46 @@ function newsselected(id){
         document.getElementById("news").innerHTML=ev['news']
     } )
 
+   
+
+{%for key in stocks_hist.keys()%}
+
+var {{key}} = {
+  x: {{stocks_hist[key]['axis']
+  |safe}},
+  close: {{stocks_hist[key]['close']}},
+  high: {{stocks_hist[key]['high']}},
+  low: {{stocks_hist[key]['low']}},
+  open: {{stocks_hist[key]['open']}},
+
+  // cutomise colors
+  increasing: {line: {color: 'black'}},
+  decreasing: {line: {color: 'red'}},
+
+  type: 'candlestick',
+  xaxis: 'x',
+  yaxis: 'y'
+};
+
+
+
+var data = [{{key}}];
+
+var layout = {
+  autosize: true,
+  width: 500,
+  height: 300,
+  dragmode: 'zoom',
+  showlegend: false,
+  xaxis: {
+    rangeslider: {
+		 visible: false
+	 }
+  }
+};
+
+Plotly.newPlot({{key}}div, data, layout);
+{%endfor%}
    
 </script>
 {%endblock%}

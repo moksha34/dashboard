@@ -25,7 +25,7 @@ from flask_bcrypt import Bcrypt
 from sqldb import init_db_command
 from user import User
 from forms import *
-
+from stocks import *
 
 with open("creds.json") as f:
     config=json.load(f)
@@ -54,6 +54,11 @@ except sqlite3.OperationalError:
 
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
+stocks={}
+stocks_hist={}
+
+
+
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
@@ -72,6 +77,10 @@ news_src={}
 jinjaenv = env(loader=fs_loader('templates'))
 for k in Newschannel.COUNTRY_CODE.keys():
     news_src.update({k: Newschannel.get_all_srcs(k)})
+
+for t in ['aapl','tsla','amzn','bb','nok']:
+    stocks_hist[t]=get_stock_price_history(t)
+
 
 
 
@@ -93,7 +102,7 @@ def signin():
 @login_required
 def index():
     print(current_user.__dict__)
-    return render_template("index.html",user=current_user,title="Dash34",articles=topnews,srcs=news_src)
+    return render_template("index.html",user=current_user,title="Dash34",articles=topnews,srcs=news_src,stocks=stocks,stocks_hist=stocks_hist)
     
 
 @app.route("/signup",methods=["GET","POST"])
