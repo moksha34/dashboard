@@ -13,7 +13,7 @@ Flask-Login==0.4.1
 Flask-SocketIO==4.2.1
 Flask-WTF==0.14.2
 google-api-python-client==1.7.11
-httplib2==0.16.0
+httplib2==0.18.0
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.3
